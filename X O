@@ -1,0 +1,48 @@
+Public Class Form1
+    Dim player As Char = "X"c ' يبدأ اللاعب الأول باللعب بالإكس
+
+    Private Sub Button_Click(sender As Object, e As EventArgs) Handles Button1.Click, Button2.Click, Button3.Click, Button4.Click, Button5.Click, Button6.Click, Button7.Click, Button8.Click, Button9.Click
+        Dim btn As Button = CType(sender, Button)
+
+        If btn.Text = "" Then ' التأكد من أن الزر فارغ
+            btn.Text = player ' تعيين اللاعب الحالي للزر
+            If CheckWin() Then
+                MessageBox.Show("Player " & player & " wins!")
+                ResetGame()
+            Else
+                If player = "X"c Then
+                    player = "O"c ' تغيير اللاعب
+                Else
+                    player = "X"c
+                End If
+            End If
+        End If
+    End Sub
+
+    Function CheckWin() As Boolean
+        ' الاختبارات لفحص إذا كان هناك فائز
+        Return (CheckLine(Button1, Button2, Button3) OrElse
+                CheckLine(Button4, Button5, Button6) OrElse
+                CheckLine(Button7, Button8, Button9) OrElse
+                CheckLine(Button1, Button4, Button7) OrElse
+                CheckLine(Button2, Button5, Button8) OrElse
+                CheckLine(Button3, Button6, Button9) OrElse
+                CheckLine(Button1, Button5, Button9) OrElse
+                CheckLine(Button3, Button5, Button7))
+    End Function
+
+    Function CheckLine(b1 As Button, b2 As Button, b3 As Button) As Boolean
+        ' الاختبار إذا كانت الزراير على نفس الخط
+        Return (b1.Text <> "" AndAlso b1.Text = b2.Text AndAlso b2.Text = b3.Text)
+    End Function
+
+    Sub ResetGame()
+        ' إعادة تعيين اللعبة بعد الانتهاء
+        For Each ctrl As Control In Me.Controls
+            If TypeOf ctrl Is Button Then
+                CType(ctrl, Button).Text = ""
+            End If
+        Next
+        player = "X"c ' إعادة تعيين اللاعب البداية للعب
+    End Sub
+End Class
